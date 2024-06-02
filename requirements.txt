@@ -8,3 +8,4 @@ sqlparse
 urllib3
 whitenoise
 yarl
+requests
