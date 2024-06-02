@@ -2,7 +2,7 @@
     "builds": [{
         "src": "linearproject/wsgi.py",
         "use": "@vercel/python",
-        "config": { "maxLambdaSize": "15mb", "python_version": "python3.12" }
+        "config": { "maxLambdaSize": "15mb", "python_version": "python3.11" }
     },
     {
         "src": "build_files.sh",
