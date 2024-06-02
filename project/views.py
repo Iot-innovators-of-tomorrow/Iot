@@ -211,52 +211,7 @@ def investment_summary_view(request):
         'total_investment': investment_amount,
         'portfolio_weight': _weight,
         "share":share,
-        'portfolio_value': total_final_value,
+        'portfolio_value': total_final_value+investment_amount,
     }
     return render(request, 'output.html', context)
 
-if __name__ == '__main__':
-    # Main code
-    investment_amount = "10200"
-
-    # Input the period the user is ready to expect (in months)
-    period = 12
-
-    # Define stock symbols
-    stock_symbols = [ "AAPL", "MSFT", "GOOGL" ]  # Example symbols
-
-    # Fetch stock prices and calculate expected returns
-    stock_prices = [ ]
-    closing_prices_matrix = prepare_matrix(stock_symbols)
-
-    # Calculate expected returns
-    expected_returns = calculate_expected_return(closing_prices_matrix)
-    for i, symbol in enumerate(stock_symbols):
-        print(f"Expected Annual Return for {symbol}: {expected_returns[ i ]:.2f}%")
-    for symbol in stock_symbols:
-        try:
-            historical_data = get_historical_data(symbol)
-            # Get the latest stock price
-            first_key, first_value = next(iter(historical_data.items( )))
-            latest_price = float(first_value[ '4. close' ])
-            stock_prices.append(latest_price)
-        except ValueError as e:
-            print(e)
-            exit( )
-
-    # Allocate portfolio using proportional allocation based on expected returns
-    portfolio, initial_weights = allocate_portfolio_proportionally(investment_amount, expected_returns)
-
-    # Print initial portfolio allocation
-    print_portfolio(portfolio, stock_prices, stock_symbols)
-
-    # Calculate final values and weights
-    final_values = calculate_final_values(portfolio, expected_returns)
-    final_weights, total_final_value = calculate_weights(final_values)
-
-    # Print the final portfolio weights and total value after the given period
-    print("\nPortfolio Weights After the Given Period:")
-    for i in range(len(stock_symbols)):
-        print(f"Weight of {stock_symbols[ i ]}: {final_weights[ i ]:.2%}")
-
-    print(f"\nTotal Portfolio Value After the Given Period: ${total_final_value:.2f}")
