@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://unpkg.com/htmx.org@1.6.1"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investment Form</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 600px;
+            margin-top: 50px;
+        }
+        .card {
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .custom-select {
+            height: calc(2.25rem + 2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <h2 class="text-center mb-4">Investment Form</h2>
+            <form method="post" hx-post="{% url 'output' %}" hx-target="#result" hx-swap="innerHTML">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="amount">Amount of Money ($):</label>
+                    <input type="number" class="form-control" id="amount" name="amount" required>
+                </div>
+                <div class="form-group">
+                    <label for="months">Amount of Months:</label>
+                    <input type="number" class="form-control" id="months" name="months" required>
+                </div>
+                <div class="form-group">
+                    <label for="ticker">Stock Tickers:</label>
+                    <select class="form-control custom-select" id="ticker" name="ticker" multiple required>
+                        <option value="AAPL">AAPL</option>
+                        <option value="GOOGL">GOOGL</option>
+                        <option value="AMZN">AMZN</option>
+                        <option value="MSFT">MSFT</option>
+                        <option value="TSLA">TSLA</option>
+                    </select>
+                    <small class="form-text text-muted">You can select up to 3 tickers.</small>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Submit</button>
+            </form>
+        </div>
+        <div id="result" class="mt-4"></div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/htmx.org@1.6.1"></script>
+    <script>
+        // Limit the number of selections to 3
+        document.getElementById('ticker').addEventListener('change', function() {
+            var selectedOptions = Array.from(this.selectedOptions);
+            if (selectedOptions.length > 3) {
+                selectedOptions.slice(3).forEach(option => option.selected = false);
+                alert('You can only select up to 3 tickers.');
+            }
+        });
+    </script>
+</body>
+</html>
