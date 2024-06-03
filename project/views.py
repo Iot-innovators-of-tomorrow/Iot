@@ -152,13 +152,18 @@ def investment_summary_view(request):
     # Calculate expected returns
     expected_returns = calculate_expected_return(closing_prices_matrix)
     ex = [data for data in expected_returns]
+    # New lists to store filtered data
+    filtered_stock_symbols = [ ]
+    filtered_expected_returns = [ ]
+    filtered_closing_prices_matrix = [ ]
 
+    # Filter out negative expected returns
     for i, symbol in enumerate(stock_symbols):
-        if expected_returns[ i ]<0:
-            stock_symbols.pop(i)
-            expected_returns.pop(i)
-            list(closing_prices_matrix).pop(i)
-    for symbol in stock_symbols:
+        if expected_returns[ i ] >= 0:
+            filtered_stock_symbols.append(symbol)
+            filtered_expected_returns.append(expected_returns[ i ])
+            filtered_closing_prices_matrix.append(closing_prices_matrix[ i ])
+    for symbol in filtered_stock_symbols:
         try:
             historical_data = get_historical_data(symbol)
             # Get the latest stock price
@@ -170,19 +175,19 @@ def investment_summary_view(request):
             exit( )
 
     # Allocate portfolio using proportional allocation based on expected returns
-    portfolio, initial_weights = allocate_portfolio_proportionally(investment_amount, expected_returns)
+    portfolio, initial_weights = allocate_portfolio_proportionally(investment_amount, filtered_expected_returns)
 
     # Print initial portfolio allocation
-    print_portfolion = print_portfolio(portfolio, stock_prices, stock_symbols)
+    print_portfolion = print_portfolio(portfolio, stock_prices, filtered_stock_symbols)
 
     # Calculate final values and weights
-    final_values = calculate_final_values(portfolio, expected_returns,period)
+    final_values = calculate_final_values(portfolio, filtered_expected_returns,period)
     final_weights, total_final_value = calculate_weights(final_values)
 
     # Print the final portfolio weights and total value after the given period
     print("\nPortfolio Weights After the Given Period:")
-    for i in range(len(stock_symbols)):
-        print(f"Weight of {stock_symbols[ i ]}: {final_weights[ i ]:.2%}")
+    for i in range(len(filtered_stock_symbols)):
+        print(f"Weight of {filtered_stock_symbols[ i ]}: {final_weights[ i ]:.2%}")
 
     print(f"\nTotal Portfolio Value After the Given Period: ${total_final_value:.2f}")
     share = []
@@ -192,11 +197,11 @@ def investment_summary_view(request):
         share.append({
            "shares_to_buy": print_portfolion[i],
             "share_price":stock_prices[i],
-            'ticker': stock_symbols[ i ],
+            'ticker': filtered_stock_symbols[ i ],
         })
         _weight.append(
             {
-                'ticker': stock_symbols[ i ],
+                'ticker': filtered_stock_symbols[ i ],
                 "portfolio_weight": final_weights[i]
             }
         )
