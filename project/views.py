@@ -74,29 +74,29 @@ def prepare_matrix(stock_symbols):
     """Prepare the matrix of closing prices for the given stock symbols."""
     all_closing_prices = []
     dates = None
-
     for symbol in stock_symbols:
         historical_data = get_historical_data(symbol)
         if dates is None:
             dates = sorted(historical_data.keys())
         closing_prices = [float(historical_data[date]['4. close']) for date in dates]
         all_closing_prices.append(closing_prices)
-
     # Convert list of lists into a numpy array and transpose it to have dates as rows and tickers as columns
     closing_prices_matrix = np.array(all_closing_prices).T  # Shape: (num_dates, num_tickers)
+    # print(closing_prices_matrix)
     return closing_prices_matrix
 
 def calculate_expected_return(closing_prices_matrix):
     """Calculate expected return based on historical data."""
     # Calculate daily returns
-    daily_returns_matrix = (closing_prices_matrix[1:] - closing_prices_matrix[:-1]) / closing_prices_matrix[:-1]
-
+    cs = closing_prices_matrix
+    for j in range(cs.shape[ 1 ]):  # Iterate over each column
+        for i in range(cs.shape[ 0 ] - 1):  # Iterate over each row except the last one
+            cs[ i, j ] = cs[ i, j ] - cs[ i + 1, j ]
+    print(cs[:-1, :])
     # Calculate the mean of daily returns for each ticker (column)
-    avg_daily_returns = np.mean(daily_returns_matrix, axis=0)
-
-    # Annualize the average daily return (assuming 252 trading days in a year)
-    expected_annual_returns = avg_daily_returns * len(closing_prices_matrix)
-    to_return = [number * 100 for number in expected_annual_returns]
+    avg_daily_returns = np.mean(closing_prices_matrix[:-1, :], axis=0)
+    print(avg_daily_returns)
+    to_return = [number  for number in avg_daily_returns]
     return to_return # Return in percentage # Return in percentage
 #%%
 
