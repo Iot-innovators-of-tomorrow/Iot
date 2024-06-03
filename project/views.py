@@ -92,8 +92,7 @@ def calculate_expected_return(closing_prices_matrix):
     for j in range(cs.shape[ 1 ]):  # Iterate over each column
         for i in range(cs.shape[ 0 ] - 1):  # Iterate over each row except the last one
             cs[ i, j ] = cs[ i, j ] - cs[ i + 1, j ]
-    print(cs[:-1, :])
-    # Calculate the mean of daily returns for each ticker (column)
+
     avg_daily_returns = np.mean(closing_prices_matrix[:-1, :], axis=0)
     print(avg_daily_returns)
     to_return = [number  for number in avg_daily_returns]
