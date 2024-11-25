@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,39 +34,33 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <h2 class="text-center mb-4">Investment Summary</h2>
-            <div class="result">
-<!--                for loop-->
-                {% for returns in expected %}
-                    <strong>Expected Annual Return for {{returns.ticker}}:</strong> {{ returns.expected_return|floatformat:2 }}<br>
-                {% endfor %}
-                <!--                for end-->
-            </div>
-            <br>
-            <div class="result">
-            <strong>Portfolio Allocation for Maximum Profit:</strong><br>
-<!--                for loop-->
-                {% for sh in share %}
-                    Buy {{ sh.shares_to_buy |floatformat:2 }} shares of {{sh.ticker}} (total ${{ total_investment }}) at price $ {{ sh.share_price|floatformat:2 }}<br>
-                {% endfor %}
-                <!--            for end-->
-            </div>
-            <br>
-            <div class="result">
-                <strong>Portfolio Weights After the Given Period:</strong><br>
-<!--                for loop-->
-                {% for weight in portfolio_weight %}
-                    Weight of {{weight.ticker}}: {{ weight.portfolio_weight|floatformat:2 }}<br>
-                {% endfor %}
-<!--                for end-->
-            </div>
-            <br>
-            <div class="result">
-                <strong>Total Portfolio Value After the Given Period:</strong> ${{ portfolio_value|floatformat:2 }}
-            </div>
-        </div>
+<div class="container" style=" text-align: center; margin: 20px auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 50%; background-color: #f9f9f9;">
+    <!-- Image Section -->
+    <div class="image" style="margin-bottom: 20px;">
+        <img src="{% static image %}" alt="Image" style="width: 100%;  object-fit: cover; border: 2px solid #ddd; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
     </div>
+
+    <!-- Text Section -->
+    <p style="font-size: 18px; font-weight: bold; margin-bottom: 20px; color: #333;">Are you satisfied with the result?</p>
+
+    <!-- Buttons Section -->
+    <div class="buttons" style="display: flex; justify-content: center; gap: 20px;">
+        <button onclick="refreshPage()" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; transition: background-color 0.3s;">
+            Yes
+        </button>
+        <button onclick="refreshPage()" style="padding: 10px 20px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; transition: background-color 0.3s;">
+            No
+        </button>
+    </div>
+</div>
+
+<script>
+    // Function to refresh the page
+    function refreshPage() {
+        location.reload(); // Reloads the current page
+    }
+</script>
+
+
 </body>
 </html>

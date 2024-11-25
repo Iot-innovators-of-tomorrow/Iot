@@ -1,7 +1,60 @@
+import time
+
 from django.shortcuts import render,HttpResponse,redirect
 import requests
 import numpy as np
 from .models import Stock
+
+def home_page(request):
+    if request.method =="POST":
+        # Main code
+        investment_amount = int(request.POST.get("amount"))
+
+        # Input the period the user is ready to expect (in months)
+        period = int(request.POST.get("months"))
+
+        # Define stock symbols
+        stock_symbols = request.POST.getlist("ticker")
+
+        # Fetch stock prices and calculate expected returns
+        stock_prices = [ ]
+        closing_prices_matrix = prepare_matrix(stock_symbols)
+
+        # Calculate expected returns
+        expected_returns = calculate_expected_return(closing_prices_matrix)
+        for i, symbol in enumerate(stock_symbols):
+            print(f"Expected Annual Return for {symbol}: {expected_returns[ i ]:.2f}%")
+        for symbol in stock_symbols:
+            try:
+                historical_data = get_historical_data(symbol)
+                # Get the latest stock price
+                first_key, first_value = next(iter(historical_data.items( )))
+                latest_price = float(first_value[ '4. close' ])
+                stock_prices.append(latest_price)
+            except ValueError as e:
+                print(e)
+                exit( )
+
+        # Allocate portfolio using proportional allocation based on expected returns
+        portfolio, initial_weights = allocate_portfolio_proportionally(investment_amount, expected_returns)
+
+        # Print initial portfolio allocation
+        print_portfolio(portfolio, stock_prices, stock_symbols)
+
+        # Calculate final values and weights
+        final_values = calculate_final_values(portfolio, expected_returns)
+        final_weights, total_final_value = calculate_weights(final_values)
+
+        # Print the final portfolio weights and total value after the given period
+        print("\nPortfolio Weights After the Given Period:")
+        for i in range(len(stock_symbols)):
+            print(f"Weight of {stock_symbols[ i ]}: {final_weights[ i ]:.2%}")
+
+        print(f"\nTotal Portfolio Value After the Given Period: ${total_final_value:.2f}")
+
+
+        return redirect("output")
+    return render(request,template_name="homepage.html",)
 
 def initial_page(request):
     if request.method =="POST":
@@ -53,7 +106,6 @@ def initial_page(request):
 
         return redirect("output")
     return render(request,template_name="index.html",)
-
 
 
 def get_historical_data(symbol, outputsize='compact'):
@@ -133,89 +185,16 @@ def calculate_weights(final_values):
 
 
 def investment_summary_view(request):
-
-
-    # Main code
-    investment_amount = int(request.POST.get("amount"))
-
-    # Input the period the user is ready to expect (in months)
-    period = int(request.POST.get("months"))
-
-    # Define stock symbols
+    # Define object symbols
     stock_symbols = request.POST.getlist("ticker")
-
-    s = [data for data in stock_symbols]
-    # Fetch stock prices and calculate expected returns
-    stock_prices = [ ]
-    closing_prices_matrix = prepare_matrix(stock_symbols)
-
-    # Calculate expected returns
-    expected_returns = calculate_expected_return(closing_prices_matrix)
-    ex = [data for data in expected_returns]
-    # New lists to store filtered data
-    filtered_stock_symbols = [ ]
-    filtered_expected_returns = [ ]
-    filtered_closing_prices_matrix = [ ]
-
-    # Filter out negative expected returns
-    for i, symbol in enumerate(stock_symbols):
-        if expected_returns[ i ] >= 0:
-            filtered_stock_symbols.append(symbol)
-            filtered_expected_returns.append(expected_returns[ i ])
-            filtered_closing_prices_matrix.append(closing_prices_matrix[ i ])
-    for symbol in filtered_stock_symbols:
-        try:
-            historical_data = get_historical_data(symbol)
-            # Get the latest stock price
-            first_key, first_value = next(iter(historical_data.items( )))
-            latest_price = float(first_value[ '4. close' ])
-            stock_prices.append(latest_price)
-        except ValueError as e:
-            print(e)
-            exit( )
-
-    # Allocate portfolio using proportional allocation based on expected returns
-    portfolio, initial_weights = allocate_portfolio_proportionally(investment_amount, filtered_expected_returns)
-
-    # Print initial portfolio allocation
-    print_portfolion = print_portfolio(portfolio, stock_prices, filtered_stock_symbols)
-
-    # Calculate final values and weights
-    final_values = calculate_final_values(portfolio, filtered_expected_returns,period)
-    final_weights, total_final_value = calculate_weights(final_values)
-
-    # Print the final portfolio weights and total value after the given period
-    print("\nPortfolio Weights After the Given Period:")
-    for i in range(len(filtered_stock_symbols)):
-        print(f"Weight of {filtered_stock_symbols[ i ]}: {final_weights[ i ]:.2%}")
-
-    print(f"\nTotal Portfolio Value After the Given Period: ${total_final_value:.2f}")
-    share = []
-    expected = []
-    _weight = []
-    for i in range(len(print_portfolion)):
-        share.append({
-           "shares_to_buy": print_portfolion[i],
-            "share_price":stock_prices[i],
-            'ticker': filtered_stock_symbols[ i ],
-        })
-        _weight.append(
-            {
-                'ticker': filtered_stock_symbols[ i ],
-                "portfolio_weight": final_weights[i]
-            }
-        )
-    for i in range(len(ex)):
-        expected.append({
-            'ticker':          s[ i ],
-            "expected_return": ex[ i ]
-        })
-    context = {
-        'expected': expected,
-        'total_investment': investment_amount,
-        'portfolio_weight': _weight,
-        "share":share,
-        'portfolio_value': total_final_value+investment_amount,
-    }
+    time.sleep(5)
+    if "smartphone" in stock_symbols :
+        context = {
+            "image":"static/images/image_phone.jpg"
+        }
+    else:
+        context = {
+            "image": "static/images/laptop_laptop.jpg"
+        }
     return render(request, 'output.html', context)
 
