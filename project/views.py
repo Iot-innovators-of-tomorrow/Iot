@@ -4,7 +4,12 @@ from django.shortcuts import render,HttpResponse,redirect
 import requests
 import numpy as np
 from .models import Stock
-
+from .serializers import ImageUploadSerializer
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework import status
+import os
+from django.views.decorators.csrf import csrf_exempt
 def home_page(request):
     if request.method =="POST":
         # Main code
@@ -198,3 +203,25 @@ def investment_summary_view(request):
         }
     return render(request, 'output.html', context)
 
+
+@csrf_exempt
+@api_view(['POST'])
+def upload_image(request):
+    # Initialize the serializer with the incoming data
+    serializer = ImageUploadSerializer(data=request.data)
+
+    if serializer.is_valid():
+        # Get the camera index and file from the request
+        camera_index = serializer.validated_data['camera_index']
+        uploaded_file = serializer.validated_data['file']
+
+        # Save the uploaded file (you can change the directory as needed)
+        file_path = os.path.join('C:/Users/Sarvar/Desktop/INHA/5th Semester/IOT/project/Iot/found_images', f"Camera{camera_index}_{uploaded_file.name}")
+        with open(file_path, 'wb') as f:
+            for chunk in uploaded_file.chunks():
+                f.write(chunk)
+
+        return Response({"message": f"File received from Camera {camera_index} and saved to {file_path}."}, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
