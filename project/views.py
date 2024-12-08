@@ -36,6 +36,7 @@ def initial_page(request):
 
 def investment_summary_view(request):
     # Define object symbols
+    global search_object
     stock_symbols = request.POST.getlist("ticker")
     time.sleep(5)
     if "smartphone" in stock_symbols :
@@ -64,7 +65,7 @@ def upload_image(request):
         uploaded_file = serializer.validated_data['file']
 
         # Save the uploaded file (you can change the directory as needed)
-        file_path = os.path.join('C:/Users/Sarvar/Desktop/INHA/5th Semester/IOT/project/Iot/found_images', f"Camera{camera_index}_{uploaded_file.name}")
+        file_path = os.path.join('/Users/sharifovazizbek/IOT/Iot/found_images', f"Camera{camera_index}_{uploaded_file.name}")
         with open(file_path, 'wb') as f:
             for chunk in uploaded_file.chunks():
                 f.write(chunk)
@@ -74,12 +75,10 @@ def upload_image(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-
-
 def get_search_object(request):
     global search_object
     if search_object:
         return JsonResponse({"search_object": search_object})
+        
     return JsonResponse({"search_object": None})
 
