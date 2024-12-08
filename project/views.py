@@ -39,6 +39,7 @@ def upload_image(request):
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 def render_view(request):
     if request.method == "POST":
         Images.objects.all().delete()
@@ -46,3 +47,4 @@ def render_view(request):
     
     images = Images.objects.all()
     return render(request,template_name="output.html",context={"images":images})
+
