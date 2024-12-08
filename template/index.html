@@ -50,12 +50,12 @@
     <div class="container">
         <div class="card">
             <h2 class="text-center mb-4">Smart House Assistant System</h2>
-            <form method="post" hx-post="{% url 'output' %}" hx-target="#result" hx-swap="innerHTML" onsubmit="showSpinner()">
+            <form method="post" action="{% url 'output' %}"></form>
                 {% csrf_token %}
                 <div class="form-group">
-                    <label for="ticker">Choose object you are looking for:</label>
-                    <select class="form-control custom-select" id="ticker" name="ticker" required>
-                        <option value="smartphone">smartphone</option>
+                    <label for="object">Choose object you are looking for:</label>
+                    <select class="form-control custom-select" id="object" name="object" required>
+                        <option value="smartphone">cell phone</option>
                         <option value="laptop">laptop</option>
                     </select>
                     <small class="form-text text-muted">Select only one object</small>
@@ -66,18 +66,9 @@
 
             </form>
         </div>
-        <div id="result" class="mt-4">
-            <div class="spinner" id="loadingSpinner"></div>
-        </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://unpkg.com/htmx.org@1.6.1"></script>
-    <script>
-        function showSpinner() {
-            document.getElementById('loadingSpinner').style.display = 'block';
-        }
-    </script>
 </body>
 </html>
