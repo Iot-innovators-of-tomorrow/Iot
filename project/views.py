@@ -78,7 +78,7 @@ def upload_image(request):
 def get_search_object(request):
     global search_object
     if search_object:
-        return JsonResponse({"search_object": search_object})
-        
+        header = {"search_object": search_object}
+        return JsonResponse(header)
     return JsonResponse({"search_object": None})
 
