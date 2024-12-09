@@ -9,4 +9,4 @@ class Images(models.Model):
     image = models.ImageField(upload_to="images",default=None)
     indexs = models.IntegerField(default=0)
     def __str__(self):
-        return self.image
+        return str(self.id)
