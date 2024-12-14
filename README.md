@@ -144,20 +144,15 @@ stateDiagram-v2
 ## Project Team
 
 ```mermaid
-organizationChart
-    CEO[Smart Home Assistant]
-    B[Project Lead]
-    C[Computer Vision]
-    D[Web Development]
-    E[Hardware Integration]
+graph TD
+    A[Smart Home Assistant] --> B[Project Lead<br>Javokhir Yuldoshev]
+    B --> C[Computer Vision<br>Akimov Sarvar]
+    B --> D[Web Development<br>Azizbek Sharifov]
+    B --> E[Hardware Integration<br>Abdulloh Shabonov]
 
-    CEO --> B
-    B --> C
-    B --> D
-    B --> E
-
-    B[Project Lead: Javokhir Yuldoshev]
-    C[Computer Vision: Akimov Sarvar]
-    D[Web Development: Azizbek Sharifov]
-    E[Hardware Integration: Abdulloh Shabonov]
+    style A fill:#4E4E4EFF,stroke:#333,stroke-width:2px
+    style B fill:#0F3E44FF,stroke:#333,stroke-width:2px
+    style C fill:#6666ff,stroke:#333,stroke-width:2px
+    style D fill:#6666ff,stroke:#333,stroke-width:2px
+    style E fill:#6666ff,stroke:#333,stroke-width:2px
 ```
