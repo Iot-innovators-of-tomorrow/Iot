@@ -34,11 +34,15 @@
     </style>
 </head>
 <body>
+    <form method="post">
+        {% csrf_token %}
     {% for image in images %}
         <div class="container" style=" text-align: center; margin: 20px auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); width: 50%; background-color: #f9f9f9;">
             <!-- Image Section -->
             <div class="image" style="margin-bottom: 20px;">
-                <img src="{% static image.url %}" alt="Image" style="width: 100%;  object-fit: cover; border: 2px solid #ddd; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+                {% if image.image %}
+                    <img src="{{image.image.url}}" alt="Image" style="width: 100%;  object-fit: cover; border: 2px solid #ddd; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+                {% endif %}
             </div>
 
             <!-- Text Section -->
@@ -46,22 +50,21 @@
 
             <!-- Buttons Section -->
             <div class="buttons" style="display: flex; justify-content: center; gap: 20px;">
-                <button onclick="refreshPage()" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; transition: background-color 0.3s;">
+                <a href="{% url 'home_page' %}" style="padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; text-decoration: none; display: inline-block; transition: background-color 0.3s;">
                     Yes
-                </button>
-                <button onclick="refreshPage()" style="padding: 10px 20px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; transition: background-color 0.3s;">
-                    No
-                </button>
+                </a>
+                <a href="{% url 'index' %}" style="padding: 10px 20px; background-color: #dc3545; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; text-decoration: none; display: inline-block; transition: background-color 0.3s">
+                No
+                </a>
             </div>
         </div>
     {% endfor %}
-<script>
-    // Function to refresh the page
-    function refreshPage() {
-        location.reload(); // Reloads the current page
-    }
-</script>
+</form>
 
+
+{% if length == 0 %}
+    {% include "no_page.html" with greeting="Hello, User!" %}
+{% endif %}
 
 </body>
 </html>

@@ -1,7 +1,6 @@
 .gitignore
-
+venv-linear/
 __pycache__/
-
 .env
 
 *cpython*
