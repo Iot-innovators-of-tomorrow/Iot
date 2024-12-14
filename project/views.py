@@ -17,11 +17,9 @@ def home_page(request):
 @csrf_exempt
 def initial_page(request):
     if request.method =="POST":
-
-        
         objecte = request.POST.get("object")
         header = {"Content-Type":"applicaiton/json"}
-        # requests.post("http://192.168.219.106:5000/search_object/",json={"item_name":objecte},headers=header )
+        requests.post("http://192.168.219.106:5000/search_object/",json={"item_name":objecte},headers=header )
         return redirect("output")
     return render(request,template_name="index.html",)
 
@@ -29,7 +27,6 @@ def initial_page(request):
 @csrf_exempt
 @api_view(['POST'])
 def upload_image(request):
-    
     if request.data:
         message = request.POST.get("message")
         print(message,message == None)    
@@ -47,7 +44,6 @@ def render_view(request):
     if request.method == "POST":
         Images.objects.all().delete()
         return redirect("index")
-    
     images = Images.objects.all()
     length = len(images)
     return render(request,template_name="output.html",context={"images":images,"length":length})

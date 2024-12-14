@@ -6,7 +6,5 @@ urlpatterns = [
     path("pictures/", upload_image,name="pictures"),
     path("output/", render_view,name="output"),
     path("no_page/", no_page_view,name="no_page"),
-
-
 ]
 
