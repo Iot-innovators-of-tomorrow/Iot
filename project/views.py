@@ -21,7 +21,7 @@ def initial_page(request):
         
         objecte = request.POST.get("object")
         header = {"Content-Type":"applicaiton/json"}
-        requests.post("http://192.168.219.106:5000/search_object/",json={"item_name":objecte},headers=header )
+        # requests.post("http://192.168.219.106:5000/search_object/",json={"item_name":objecte},headers=header )
         return redirect("output")
     return render(request,template_name="index.html",)
 
