@@ -2,6 +2,12 @@
 
 An intelligent object detection system that helps locate items in your home using computer vision and Django/Flask integration.
 
+## 🎥 Demo video
+
+Video demonstration of the project 👉 **[video link click to see](https://drive.google.com/file/d/1okLPC6asEOXA9_uM1gL_0CQZOY_8wBoK/view)**  
+
+
+
 ## Visualisation
 
 ### Homepage
