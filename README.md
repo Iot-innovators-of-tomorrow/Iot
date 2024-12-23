@@ -156,9 +156,10 @@ graph TD
     B --> D[Web Development<br>Azizbek Sharifov]
     B --> E[Hardware Integration<br>Abdulloh Shabonov]
 
-    style A fill:#4E4E4EFF,stroke:#333,stroke-width:2px
-    style B fill:#0F3E44FF,stroke:#333,stroke-width:2px
-    style C fill:#6666ff,stroke:#333,stroke-width:2px
-    style D fill:#6666ff,stroke:#333,stroke-width:2px
-    style E fill:#6666ff,stroke:#333,stroke-width:2px
+    style A fill:#FFDDC1,stroke:#FF7F50,stroke-width:2px
+    style B fill:#FFD700,stroke:#FF8C00,stroke-width:2px
+    style C fill:#90EE90,stroke:#228B22,stroke-width:2px
+    style D fill:#ADD8E6,stroke:#4682B4,stroke-width:2px
+    style E fill:#FFA07A,stroke:#CD5C5C,stroke-width:2px
+
 ```
